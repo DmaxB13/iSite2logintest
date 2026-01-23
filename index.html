@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <img id="profile-pic" class="hidden" />
+  <button id="login-btn" onclick="location.href='login.html'">Login</button>
+</nav>
+
+<h1>Welcome to My Site</h1>
+
+<script type="module">
+  import { watchAuthState } from "./firebase.js";
+
+  const loginBtn = document.getElementById("login-btn");
+  const profilePic = document.getElementById("profile-pic");
+
+  watchAuthState(
+    (user) => {
+      loginBtn.style.display = "none";
+      profilePic.classList.remove("hidden");
+      profilePic.src = user.photoURL || "default.png";
+      profilePic.onclick = () => window.location.href = "member.html";
+    },
+    () => {
+      profilePic.classList.add("hidden");
+      loginBtn.style.display = "block";
+    }
+  );
+</script>
+
+</body>
+</html>

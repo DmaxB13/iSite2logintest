@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Page</title>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div id="admin-section" style="display:none;">
+  <h2>Create New User</h2>
+
+  <form id="create-user-form">
+    <input type="email" id="new-email" placeholder="User Email" required><br><br>
+    <input type="password" id="new-password" placeholder="User Password" required><br><br>
+    <button type="submit">Create User</button>
+  </form>
+
+  <p id="create-status"></p>
+
+  <button id="logout">Log Out</button>
+</div>
+
+<p id="no-access" style="color:red; display:none;">
+  You are not an admin. Access denied.
+</p>
+
+<script type="module">
+  import { watchAuthState, logout, createUser, isAdmin } from "./firebase.js";
+
+  const adminSection = document.getElementById("admin-section");
+  const noAccess = document.getElementById("no-access");
+
+  watchAuthState(async (user) => {
+    if (await isAdmin(user)) {
+      adminSection.style.display = "block";
+    } else noAccess.style.display = "block";
+  }, () => window.location.href = "login.html");
+
+  document.getElementById("create-user-form").onsubmit = (e) => {
+    e.preventDefault();
+    createUser(newEmail.value, newPassword.value)
+      .then(() => createStatus.textContent = "User created!")
+      .catch(err => createStatus.textContent = err.message);
+  };
+
+  document.getElementById("logout").onclick = () => logout();
+</script>
+
+</body>
+</html>

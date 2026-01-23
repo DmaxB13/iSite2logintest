@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Members Only</title>
+</head>
+<body>
+
+<h1>Member Page</h1>
+<button id="logout">Log Out</button>
+
+<script type="module">
+  import { watchAuthState, logout } from "./firebase.js";
+
+  watchAuthState(
+    () => {},
+    () => window.location.href = "login.html"
+  );
+
+  document.getElementById("logout").onclick = () => logout();
+</script>
+
+</body>
+</html>
