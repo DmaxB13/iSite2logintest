@@ -52,3 +52,31 @@ export async function isAdmin(user) {
 export function createUser(email, password) {
   return createUserWithEmailAndPassword(auth, email, password);
 }
+
+async function loadMinecraftHead(user) {
+    const uid = user.uid;
+
+    // Load Firestore user document
+    const docRef = db.collection("users").doc(uid);
+    const snapshot = await docRef.get();
+
+    if (!snapshot.exists) return;
+
+    const data = snapshot.data();
+    const uuid = data.uuid;
+
+    if (!uuid) return;
+
+    // Minotar avatar (HEAD ONLY)
+    const imgUrl = `https://minotar.net/avatar/${uuid}/64`;
+
+    // Replace login button with avatar
+    const profileContainer = document.getElementById("profileArea");
+
+    profileContainer.innerHTML = `
+        <img src="${imgUrl}"
+             alt="Profile"
+             style="width:40px;height:40px;border-radius:4px;cursor:pointer;"
+             onclick="window.location='member.html'" />
+    `;
+}
